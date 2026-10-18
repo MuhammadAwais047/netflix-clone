@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineWave — Unlimited films, series and more</title>
+  <meta name="description" content="A Netflix-style streaming UI built with pure vanilla JavaScript. Hero billboard, carousels, detail modals and My List — powered by demo data, stored locally." />
+  <meta property="og:title" content="CineWave — Netflix-style streaming UI in vanilla JS" />
+  <meta property="og:description" content="A Netflix-style streaming UI built with pure vanilla JavaScript." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%AC%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topnav" id="topnav">
+    <div class="topnav-inner">
+      <a class="logo" href="#" id="logo-link">CINE<span>WAVE</span></a>
+      <nav class="nav-links" aria-label="Browse">
+        <button class="nav-link is-active" id="nav-home" type="button">Home</button>
+        <button class="nav-link" id="nav-shows" type="button">TV Shows</button>
+        <button class="nav-link" id="nav-movies" type="button">Movies</button>
+        <button class="nav-link" id="nav-mylist" type="button">My List</button>
+      </nav>
+      <div class="nav-right">
+        <div class="searchbox" id="searchbox">
+          <button class="icon-btn" id="search-toggle" type="button" aria-label="Search" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          </button>
+          <input id="search-input" type="search" placeholder="Titles, genres" aria-label="Search titles" />
+        </div>
+        <span class="avatar" aria-hidden="true">you</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ HOME (hero + rows) ============ -->
+    <section class="view" id="home-view">
+      <div class="hero" id="hero">
+        <img id="hero-img" class="hero-img" alt="" />
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <p class="hero-tag" id="hero-tag"></p>
+          <h1 id="hero-title"></h1>
+          <div class="hero-meta">
+            <span class="match" id="hero-match"></span>
+            <span id="hero-year"></span>
+            <span class="age" id="hero-age"></span>
+            <span id="hero-dur"></span>
+          </div>
+          <p class="hero-desc" id="hero-desc"></p>
+          <div class="hero-btns">
+            <button class="btn btn-light" id="hero-play" type="button">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15l13-7.5z"/></svg>
+              Play
+            </button>
+            <button class="btn btn-glass" id="hero-info" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+              More Info
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="rows" class="rows"></div>
+    </section>
+
+    <!-- ============ GRID VIEW (search / my list) ============ -->
+    <section class="view" id="grid-view" hidden>
+      <div class="grid-head">
+        <h1 id="grid-title"></h1>
+      </div>
+      <div id="grid" class="grid"></div>
+      <p id="grid-empty" class="grid-empty" hidden>Nothing here yet. Add titles with the ＋ button.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Demo data & placeholder images from picsum.photos — no real streaming here. A vanilla-JS Netflix-style UI by
+      <a href="https://github.com/MuhammadAwais047" target="_blank" rel="noopener noreferrer">Muhammad Awais</a> ·
+      <a href="https://github.com/MuhammadAwais047/netflix-clone" target="_blank" rel="noopener noreferrer">Source</a></p>
+  </footer>
+
+  <!-- ============ DETAIL MODAL ============ -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card">
+      <button class="modal-close" id="modal-close" type="button" data-close aria-label="Close">✕</button>
+      <div class="m-hero">
+        <img id="m-img" alt="" />
+        <div class="m-hero-shade" aria-hidden="true"></div>
+        <div class="m-hero-title">
+          <h2 id="m-title"></h2>
+          <div class="m-hero-btns">
+            <button class="btn btn-light btn-sm" id="m-play" type="button">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15l13-7.5z"/></svg>
+              Play
+            </button>
+            <button class="round-btn" id="m-add" type="button" aria-label="Add to My List">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <button class="round-btn" id="m-like" type="button" aria-label="Like">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1zM7 11l4-7c1.5 0 2.5 1 2.5 2.5L13 10h5.5a1.5 1.5 0 0 1 1.5 1.7l-.9 6A2 2 0 0 1 17 19.5H7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="m-body">
+        <div class="m-left">
+          <div class="m-meta">
+            <span class="match" id="m-match"></span>
+            <span id="m-year"></span>
+            <span class="age" id="m-age"></span>
+            <span id="m-dur"></span>
+            <span class="hd">HD</span>
+          </div>
+          <p id="m-desc"></p>
+        </div>
+        <div class="m-right">
+          <p><span class="m-label">Genres: </span><span id="m-genres"></span></p>
+          <p><span class="m-label">This title is: </span><span id="m-mood"></span></p>
+        </div>
+      </div>
+      <h3 class="m-sim-title">More Like This</h3>
+      <div id="m-similar" class="m-similar"></div>
+    </div>
+  </div>
+
+  <!-- ============ PLAYER OVERLAY ============ -->
+  <div id="player" class="player" role="dialog" aria-modal="true" aria-label="Player" hidden>
+    <img id="player-img" class="player-img" alt="" />
+    <div class="player-shade" aria-hidden="true"></div>
+    <button class="player-close" id="player-close" type="button" aria-label="Close player">✕</button>
+    <div class="player-ui">
+      <p class="player-title" id="player-title"></p>
+      <div class="player-bar"><span id="player-progress"></span></div>
+      <p class="player-hint">Pretend we're streaming — this is a UI demo 🍿</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
